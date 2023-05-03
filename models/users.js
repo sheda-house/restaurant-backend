@@ -11,10 +11,11 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     Password: String,
+    cPassword: String,
     RoleId: {
         type:mongoose.Schema.Types.ObjectId,
         ref:"Role"
     }
 })
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("Users", userSchema)
