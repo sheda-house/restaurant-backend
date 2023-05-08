@@ -11,9 +11,7 @@ const menuSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Vendor"
     },
-        createdAt: Number,
-        updatedAt: Number,
-        deletedAt: Number,
+    
         stockStatus:{
             inStock: String,
             outOfStock: String

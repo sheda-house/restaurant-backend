@@ -22,14 +22,15 @@ menuRouter.get("/", async (req, res) => {
 // function to save menu
 menuRouter.post("/", async (req, res) => {
   const file = req.files.image;
+  console.log(file);
   const { title, desc, price } = req.body;
   if (!file || !title || !desc || !price) {
     return res.json({ success: false, message: "Invalid Parameters" });
   }
 
   //Generate unique file name
-  const fileName = randomId + file.name;
-
+  const fileName = randomId + file.name; 
+console.log(fileName);
   //Generate image url
   const imgUrl =
     req.protocol + "://" + req.get("host") + "/api/v1/menu/uploads/" + fileName;
@@ -57,11 +58,10 @@ menuRouter.post("/", async (req, res) => {
     }
 
     return saveDocument();
-  });
+});
 });
 
 menuRouter.get("/uploads/:imageName", async (req, res) => {
-  console.log(req.params);
   const imageName = req.params.imageName;
   const imagePath = __dirname + "/uploads/" + imageName;
 
