@@ -19,8 +19,7 @@ const VendorSchema = new mongoose.Schema({
         type:String
     },
     PhoneNumber:{
-        type:String,
-        unique:true
+        type:String
     }
 })
 

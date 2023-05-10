@@ -35,6 +35,7 @@ console.log(fileName);
   const imgUrl =
     req.protocol + "://" + req.get("host") + "/api/v1/menu/uploads/" + fileName;
 
+
   const document = { title, desc, price, image: imgUrl };
 
   const saveDocument = async () => {

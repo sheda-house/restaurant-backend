@@ -12,9 +12,10 @@ router.get('/ping',(req,res)=>{
 
 router.post('/login',async(req,res)=>{
     console.log(req.body)
-    const {email, password} = req.body
+    const {email, password, phone} = req.body
     let vendor =await Vendor.findOne({
-        Email:email
+        Email:email,
+        PhoneNumber:phone
     })
     
     console.log(vendor)
