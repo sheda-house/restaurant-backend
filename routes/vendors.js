@@ -14,10 +14,11 @@ router.post('/login',async(req,res)=>{
     console.log(req.body)
     const {email, password} = req.body
     let vendor =await Vendor.findOne({
-        where:email
+        Email:email
     })
+    
     console.log(vendor)
-    if(vendor == null){
+    if(!vendor || vendor == null || vendor == undefined){
         return res.json({
             message:"User with this email does not exist"
         })
@@ -41,18 +42,19 @@ router.post('/login',async(req,res)=>{
     })
 })
 
-router.post('/', async(req,res)=>{
+router.post('/register', async(req,res)=>{
     const {businessname, email,
     password, location, phone} = req.body
 
-    let emailExists = await Vendor.findOne({email})
+    let emailExists = await Vendor.findOne({Email:email})
+    console.log(emailExists);
     if(emailExists){
         return res.json({
             message:"Email already exists"
         })
     }
     let salt =10;
-    let hashedPassword = await bcrypt.hash(password,salt)
+    let hashedPassword = await bcrypt.hash(password,10)
     let createNewVendor = await Vendor.create({
         BusinessName:businessname,
         Email:email,
