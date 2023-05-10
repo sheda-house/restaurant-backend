@@ -6,6 +6,7 @@ const vendorRoutes = require("./routes/vendors");
 const rolesRoutes = require("./routes/roles");
 const userRouter = require("./routes/users");
 const menuRouter = require("./routes/menu");
+const authRouter = require('./routes/auth')
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
@@ -17,6 +18,7 @@ app.use("/api/v1/vendors", vendorRoutes);
 app.use("/api/v1/roles", rolesRoutes);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/menu", menuRouter);
+app.use('/api/v1/auth', authRouter)
 
 connectDB();
 app.listen(port, () => {
