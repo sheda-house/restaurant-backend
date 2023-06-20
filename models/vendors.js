@@ -20,7 +20,11 @@ const VendorSchema = new mongoose.Schema({
     },
     PhoneNumber:{
         type:String,
-        unique:true
+        unique:true,
+    },
+    role: {
+        type: String,
+default: "Vendor"
     }
 })
 

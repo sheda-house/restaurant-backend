@@ -1,8 +1,8 @@
 const express = require('express')
 const Role = require('../models/roles')
-const router = express.Router()
+const roleRouter = express.Router()
 
-router.post('/',async (req,res)=>{
+roleRouter.post('/',async (req,res)=>{
     const {Name} = req.body
     let checkRoleExists = await Role.find({
         where:Name
@@ -24,7 +24,7 @@ router.post('/',async (req,res)=>{
     })
 })
 
-router.get('/', async(req,res)=>{
+roleRouter.get('/', async(req,res)=>{
     let roles = await Role.find();
     return res.json({
         message:"Roles fetched succesfully",
@@ -33,4 +33,4 @@ router.get('/', async(req,res)=>{
 })
 
 
-module.exports = router
+module.exports = roleRouter

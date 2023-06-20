@@ -15,7 +15,7 @@ const menuSchema = new mongoose.Schema({
         stockStatus:{
             inStock: String,
             outOfStock: String
-        }
+        },
 },
 {timestamps:true}
 )

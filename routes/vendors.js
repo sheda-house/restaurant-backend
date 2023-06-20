@@ -1,37 +1,38 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const Vendor = require('../models/vendors')
+const roles = require('../models/roles')
 const { signJwt } = require('../utils/jwt')
-const router = express.Router()
+const users = require('../models/users')
+const vendorRouter = express.Router()
 
-router.get('/ping',(req,res)=>{
-    res.json({
-        message:"Vendor endpoint alive"
-    })
-})
 
-router.post('/login',async(req,res)=>{
+
+vendorRouter.post('/login',async(req,res)=>{
     console.log(req.body)
-    const {email, password} = req.body
+    const {Email, Password, role} = req.body
+    let Role = await roles.findOne({role})
     let vendor =await Vendor.findOne({
-        Email:email
+        Email:Email
     })
     
     console.log(vendor)
-    if(!vendor || vendor == null || vendor == undefined){
+    if(vendor == null ){
         return res.json({
             message:"User with this email does not exist"
         })
     }
-    let passwordValid = await bcrypt.compare(password, vendor.Password)
+    let passwordValid = await bcrypt.compare(Password, vendor.Password)
     if(!passwordValid){
         return res.json({
             message:"Incorrect password"
         })
     }
+  
     var token = signJwt({id:vendor._id, email:vendor.Email})
     return res.json({
-        message:"Useer logged in successfully",
+        status: true,
+        message:"User logged in successfully",
         data:{
             business:vendor.BusinessName,
             email:vendor.Email,
@@ -42,37 +43,50 @@ router.post('/login',async(req,res)=>{
     })
 })
 
-router.post('/register', async(req,res)=>{
+vendorRouter.post('/register', async(req,res)=>{
     const {businessname, email,
     password, location, phone} = req.body
 
+   
     let emailExists = await Vendor.findOne({Email:email})
+    let nameExist = await Vendor.findOne({BusinessName: businessname})
+    console.log(businessname);
+
+   
+    if(nameExist){
+        return res.json({
+            message: "Business name already Exist"
+        })
+    }
     console.log(emailExists);
     if(emailExists){
         return res.json({
             message:"Email already exists"
         })
     }
-    let salt =10;
+    
     let hashedPassword = await bcrypt.hash(password,10)
     let createNewVendor = await Vendor.create({
         BusinessName:businessname,
         Email:email,
         Password:hashedPassword,
         PhoneNumber:phone,
-        Location:location
+        Location:location,
     })
     let token = signJwt({id:createNewVendor._id, email})
     return res.json({
-        message:"User successfully registered",
+        msg:{
+            message: "User successfully registered",
+        status: true},
         data:{
             BusinessName: createNewVendor.BusinessName,
             PhoneNumber: createNewVendor.PhoneNumber,
             Email:createNewVendor.Email,
             Location:createNewVendor.Location,
-            accessToken:token
+            accessToken:token,
+            role
         }
     })
 })
 
-module.exports = router
+module.exports = vendorRouter
