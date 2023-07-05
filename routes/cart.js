@@ -10,7 +10,7 @@ const cartRouter = express.Router();
 
 // Apply middleware
 cartRouter.use(express.json()); // Add JSON parsing middleware
-cartRouter.use(cors());
+
 
 cartRouter.post("/", verifyToken, async (req, res) => {
   try {
