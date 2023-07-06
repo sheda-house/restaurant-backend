@@ -22,17 +22,23 @@ userRouter.post("/register", async (req, res) => {
 // return res.json(roles);
 
     if (!role) {
-      return res.json({ message: "Invalid role" });
+      return res.json({ 
+        status: false,
+        message: "Invalid role" });
     }
 
     const userExist = await Users.findOne({ Email });
 
     if (userExist) {
-      return res.json({ message: "User with this Email already exists" });
+      return res.json({ 
+        status: false,
+        message: "User with this Email already exists" });
     }
 
     if (cPassword !== Password) {
-      return res.json({ message: "Confirm Password has to match Password" });
+      return res.json({ 
+        status: false,
+        message: "Confirm Password has to match Password" });
     }
 
     const hashPassword = await bcrypt.hash(Password, 10);
@@ -61,7 +67,9 @@ userRouter.post("/register", async (req, res) => {
     
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ 
+      status: false,
+      message: "Internal Server Error" });
   }
 });
 
