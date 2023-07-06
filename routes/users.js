@@ -48,6 +48,7 @@ userRouter.post("/register", async (req, res) => {
     });
 
     return res.json({
+      status: true,
       message: `User ${newUser.FirstName} has been registered. Congratulations`,
       Id: newUser._id,
       FirstName: newUser.FirstName,
