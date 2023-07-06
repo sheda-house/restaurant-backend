@@ -45,7 +45,7 @@ vendorRouter.post('/login',async(req,res)=>{
 
 vendorRouter.post('/register', async(req,res)=>{
     const {businessname, email,
-    password, location, phone} = req.body
+    password, location, phone, cPassword} = req.body
 
    
     let emailExists = await Vendor.findOne({Email:email})
@@ -64,6 +64,11 @@ vendorRouter.post('/register', async(req,res)=>{
             message:"Email already exists"
         })
     }
+    if (cPassword !== password) {
+        return res.json({ 
+          status: false,
+          message: "Confirm Password has to match Password" });
+      }
     
     let hashedPassword = await bcrypt.hash(password,10)
     let createNewVendor = await Vendor.create({

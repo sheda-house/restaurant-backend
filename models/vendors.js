@@ -15,6 +15,10 @@ const VendorSchema = new mongoose.Schema({
         type:String,
         min:8
     },
+    cPassword:{
+        type: String,
+        min: 8
+    },
     Location:{
         type:String
     },
