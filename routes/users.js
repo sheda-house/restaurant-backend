@@ -3,6 +3,21 @@ const userRouter = express.Router();
 const Users = require("../models/users");
 const bcrypt = require("bcryptjs");
 const roles = require("../models/roles");
+const { createLogger, transports, format } = require('winston');
+
+
+// Configure Winston logger
+const logger = createLogger({
+  transports: [
+    new transports.Console(),
+    new transports.File({ filename: 'error.log', level: 'error' }),
+    new transports.File({ filename: 'combined.log' })
+  ],
+  format: format.combine(
+    format.timestamp(),
+    format.json()
+  )
+});
 
 userRouter.post("/register", async (req, res) => {
   try {
@@ -66,7 +81,7 @@ userRouter.post("/register", async (req, res) => {
     });
     
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return res.status(500).json({ 
       status: false,
       message: "Internal Server Error" });
@@ -115,7 +130,7 @@ userRouter.post("/login", async (req, res) => {
     
     //}
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });

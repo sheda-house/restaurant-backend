@@ -3,11 +3,23 @@ const bcrypt = require('bcryptjs')
 const Vendor = require('../models/vendors')
 const roles = require('../models/roles')
 const { signJwt } = require('../utils/jwt')
-const users = require('../models/users')
+const { createLogger, transports, format } = require('winston');
+
 const vendorRouter = express.Router()
 
 
-
+// Configure Winston logger
+const logger = createLogger({
+    transports: [
+      new transports.Console(),
+      new transports.File({ filename: 'error.log', level: 'error' }),
+      new transports.File({ filename: 'combined.log' })
+    ],
+    format: format.combine(
+      format.timestamp(),
+      format.json()
+    )
+  });
 vendorRouter.post('/login',async(req,res)=>{
     console.log(req.body)
     const {Email, Password, role} = req.body
@@ -55,12 +67,14 @@ vendorRouter.post('/register', async(req,res)=>{
    
     if(nameExist){
         return res.json({
+            status: false,
             message: "Business name already Exist"
         })
     }
-    console.log(emailExists);
+    // console.log(emailExists);
     if(emailExists){
         return res.json({
+            status: false,
             message:"Email already exists"
         })
     }
@@ -80,17 +94,15 @@ vendorRouter.post('/register', async(req,res)=>{
     })
     let token = signJwt({id:createNewVendor._id, email})
     return res.json({
-        msg:{
-            message: "User successfully registered",
-        status: true},
-        data:{
+       
+        message: "User successfully registered",
+        status: true,
             BusinessName: createNewVendor.BusinessName,
             PhoneNumber: createNewVendor.PhoneNumber,
             Email:createNewVendor.Email,
             Location:createNewVendor.Location,
             accessToken:token,
             role
-        }
     })
 })
 
