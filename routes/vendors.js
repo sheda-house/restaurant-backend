@@ -62,7 +62,7 @@ vendorRouter.post('/register', async(req,res)=>{
    
     let emailExists = await Vendor.findOne({Email:email})
     let nameExist = await Vendor.findOne({BusinessName: businessname})
-    console.log(businessname);
+    // console.log(businessname);
 
    
     if(nameExist){
